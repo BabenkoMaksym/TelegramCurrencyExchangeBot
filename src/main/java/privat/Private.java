@@ -24,22 +24,6 @@ public class Private {
         return sale;
     }
 
-    public void setCcy(String ccy) {
-        this.ccy = ccy;
-    }
-
-    public void setBase_ccy(String base_ccy) {
-        this.base_ccy = base_ccy;
-    }
-
-    public void setBuy(float buy) {
-        this.buy = buy;
-    }
-
-    public void setSale(float sale) {
-        this.sale = sale;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,39 +1,25 @@
+import settings.Banks;
+
 import java.util.Objects;
 
 public class Bank {
 
-    private String bankName;
+    private Enum<Banks> bankName;
     private Float USD_buy;
     private Float USD_sell;
     private Float EUR_buy;
     private Float EUR_sell;
     private Float PLN_buy;
     private Float PLN_sell;
-
     private Float BTC_buy;
-
     private Float BTC_sell;
     private Float time;
 
-    public Bank(String bankName, Float USD_buy, Float USD_sell, Float EUR_buy,
-                Float EUR_sell, Float PLN_buy, Float PLN_sell, Float BTC_buy, Float BTC_sell, Float time) {
-        this.bankName = bankName;
-        this.USD_buy = USD_buy;
-        this.USD_sell = USD_sell;
-        this.EUR_buy = EUR_buy;
-        this.EUR_sell = EUR_sell;
-        this.PLN_buy = PLN_buy;
-        this.PLN_sell = PLN_sell;
-        this.BTC_buy = BTC_buy;
-        this.BTC_sell = BTC_sell;
-        this.time = time;
-    }
-
-    public String getBankName() {
+    public Enum<Banks> getBankName() {
         return bankName;
     }
 
-    public void setBankName(String bankName) {
+    public void setBankName(Enum<Banks> bankName) {
         this.bankName = bankName;
     }
 
@@ -125,14 +111,16 @@ public class Bank {
     @Override
     public String toString() {
         return "Bank{" +
-                "bankName='" + bankName + '\'' +
+                "bankName=" + bankName +
                 ", USD_buy=" + USD_buy +
                 ", USD_sell=" + USD_sell +
                 ", EUR_buy=" + EUR_buy +
                 ", EUR_sell=" + EUR_sell +
                 ", PLN_buy=" + PLN_buy +
                 ", PLN_sell=" + PLN_sell +
-                ", Time=" + time +
+                ", BTC_buy=" + BTC_buy +
+                ", BTC_sell=" + BTC_sell +
+                ", time=" + time +
                 '}';
     }
 }
