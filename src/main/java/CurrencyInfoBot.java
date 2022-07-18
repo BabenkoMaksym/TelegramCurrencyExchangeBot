@@ -1,3 +1,5 @@
+import keyboards.MenuSettings;
+import keyboards.MenuStart;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -50,15 +52,13 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
             if (commandEntity.isPresent()) {
                 String command = message.getText()
                         .substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
-                switch (command) {
-                    case "/start":
-                        execute(SendMessage.builder()
-                                .text("Ласкаво просимо.Цей бот дозволить відслідкувати актуальні курси валют")
-                                .chatId(chatId)
-                                .replyMarkup(keyboardMenuStart())
-                                .build());
+                if (command.equals("/start")) {
+                    printMenu(chatId, MenuStart.keyboard(),
+                            "Ласкаво просимо.Цей бот дозволить відслідкувати актуальні курси валют.");
                 }
             }
+        } else {
+            printMessage(chatId, "Будь ласка впишіть /start або натисніть кнопку.");
         }
     }
 
@@ -66,63 +66,16 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         long chatId = buttonQuery.getMessage().getChatId();
         String dataButtonQuery = buttonQuery.getData();
         switch (dataButtonQuery) {
+            case "GET_INFO":
+                printMessage(chatId, "Bank \n currency buy: \n currency sell:");
+                break;
             case "SETTINGS":
-                printMenu(chatId, keyboardMenuSettings(), "Налаштування:");
+                printMenu(chatId, MenuSettings.keyboard(), "Налаштування:");
+                break;
+            case "BackToSettings":
+                printMenu(chatId, MenuStart.keyboard(),
+                        "Щоб отримати інфо натисність кнопку");
         }
-    }
-
-    private static InlineKeyboardMarkup keyboardMenuStart() {
-
-        List<List<InlineKeyboardButton>> keyboardMenuStart = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSRow2 = new ArrayList<>();
-        InlineKeyboardButton buttonGetInfo = InlineKeyboardButton.builder()
-                .text("Отримати інфо")
-                .callbackData("GET_INFO")
-                .build();
-        InlineKeyboardButton buttonSettings = InlineKeyboardButton.builder()
-                .text("Налаштування")
-                .callbackData("SETTINGS")
-                .build();
-        keyboardMSRow1.add(buttonGetInfo);
-        keyboardMSRow2.add(buttonSettings);
-        keyboardMenuStart.add(keyboardMSRow1);
-        keyboardMenuStart.add(keyboardMSRow2);
-        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuStart).build();
-    }
-
-    private static InlineKeyboardMarkup keyboardMenuSettings() {
-        List<List<InlineKeyboardButton>> keyboardMenuSettings = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow2 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow3 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow4 = new ArrayList<>();
-        InlineKeyboardButton buttonNumOfDecPlaces = InlineKeyboardButton.builder()
-                .text("Кількість знаків після коми")
-                .callbackData("NumberOfDecimalPlaces")
-                .build();
-        InlineKeyboardButton buttonBank = InlineKeyboardButton.builder()
-                .text("Банк")
-                .callbackData("Bank")
-                .build();
-        InlineKeyboardButton buttonCurrency = InlineKeyboardButton.builder()
-                .text("Валюта")
-                .callbackData("Currency")
-                .build();
-        InlineKeyboardButton buttonNotificationTime = InlineKeyboardButton.builder()
-                .text("Час сповіщення")
-                .callbackData("NotificationTime")
-                .build();
-        keyboardMSetRow1.add(buttonNumOfDecPlaces);
-        keyboardMSetRow2.add(buttonBank);
-        keyboardMSetRow3.add(buttonCurrency);
-        keyboardMSetRow4.add(buttonNotificationTime);
-        keyboardMenuSettings.add(keyboardMSetRow1);
-        keyboardMenuSettings.add(keyboardMSetRow2);
-        keyboardMenuSettings.add(keyboardMSetRow3);
-        keyboardMenuSettings.add(keyboardMSetRow4);
-
-        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuSettings).build();
     }
 
     private void printMenu(Long chatID, InlineKeyboardMarkup keyboard, String text)
