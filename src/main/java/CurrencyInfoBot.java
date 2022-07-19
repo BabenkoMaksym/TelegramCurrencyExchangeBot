@@ -57,11 +57,15 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                                 .chatId(chatId)
                                 .replyMarkup(keyboardMenuStart())
                                 .build());
+                        MessageInTime time = new MessageInTime();
+                        time.setChatId(chatId);
+                        Thread userThread = new Thread(time);
+                        userThread.start();
+                        break;
                 }
             }
         }
     }
-
     private void handleQuery(CallbackQuery buttonQuery) throws TelegramApiException {
         long chatId = buttonQuery.getMessage().getChatId();
         String dataButtonQuery = buttonQuery.getData();
@@ -72,6 +76,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                         .chatId(chatId)
                         .replyMarkup(keyboardMenuSettings())
                         .build());
+            case "GET_INFO":
         }
     }
 
