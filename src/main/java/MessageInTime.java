@@ -8,15 +8,12 @@ import java.time.LocalDateTime;
 public class MessageInTime extends CurrencyInfoBot implements Runnable {
     private long chatId;
     private int hour = 12;
-
     public void setChatId(long chatId) {
         this.chatId = chatId;
     }
-
     public void setHour(int hour) {
         this.hour = hour;
     }
-
     @Override
     public void run() {
         while (true) {
@@ -31,7 +28,6 @@ public class MessageInTime extends CurrencyInfoBot implements Runnable {
             }
         }
     }
-
     public void appointedTime() {
         try {
             Thread.sleep(1010);
@@ -40,7 +36,7 @@ public class MessageInTime extends CurrencyInfoBot implements Runnable {
         }
         LocalDateTime dateNow = LocalDateTime.now();
         int SECOND = 0;
-        int MINUTE = 18;
+        int MINUTE = 0;
         LocalDateTime appointedTime = LocalDateTime.now().withHour(hour).withMinute(MINUTE).withSecond(SECOND);
         if (dateNow.isAfter(appointedTime)) {
             appointedTime = appointedTime.plusDays(1);
