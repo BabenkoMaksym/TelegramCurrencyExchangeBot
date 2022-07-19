@@ -20,6 +20,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         return "@CurrencyInfoProjectGroup1Bot";
     }
 
+
     @Override
     public String getBotToken() {
         return "5416117406:AAE1XHQxbn8TIY2perQrAAiQsNcxlcth9Wo";
@@ -53,7 +54,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 String command = message.getText()
                         .substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
                 if (command.equals("/start")) {
-                    printMenu(chatId, MenuStart.keyboard(),
+                    printMessage(chatId, MenuStart.keyboard(),
                             "Ласкаво просимо.Цей бот дозволить відслідкувати актуальні курси валют.");
                 }
             }
@@ -70,15 +71,15 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 printMessage(chatId, "Bank \n currency buy: \n currency sell:");
                 break;
             case "SETTINGS":
-                printMenu(chatId, MenuSettings.keyboard(), "Налаштування:");
+                printMessage(chatId, MenuSettings.keyboard(), "Налаштування:");
                 break;
             case "BackToSettings":
-                printMenu(chatId, MenuStart.keyboard(),
+                printMessage(chatId, MenuStart.keyboard(),
                         "Щоб отримати інфо натисність кнопку");
         }
     }
 
-    private void printMenu(Long chatID, InlineKeyboardMarkup keyboard, String text)
+    private void printMessage(Long chatID, InlineKeyboardMarkup keyboard, String text)
             throws TelegramApiException {
         execute(SendMessage.builder()
                 .text(text)
