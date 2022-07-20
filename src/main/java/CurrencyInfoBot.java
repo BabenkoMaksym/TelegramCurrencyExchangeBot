@@ -11,6 +11,25 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.*;
 
 public class CurrencyInfoBot extends TelegramLongPollingBot {
+    private static CurrencyInfoBot instance;
+    public String value;
+
+    private CurrencyInfoBot(String value) {
+        // The following code emulates slow initialization.
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        this.value = value;
+    }
+
+    public static CurrencyInfoBot getInstance(String value) {
+        if (instance == null) {
+            instance = new CurrencyInfoBot(value);
+        }
+        return instance;
+    }
 
 
     @Override
