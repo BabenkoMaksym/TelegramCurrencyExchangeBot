@@ -1,7 +1,7 @@
 package settings;
 
 public enum ZoneId {
-
+    UTCZERO(0,"UTC 0", true),
     UTCONE (1,"UTC +1", false),
     UTCTWO (2,"UTC +2", false),
     UTCTHREE (3, "UTC +3", false),
@@ -11,7 +11,7 @@ public enum ZoneId {
     UTCSEVEN (7,"UTC +7", false),
     UTCEIGHT (8,"UTC +8", false),
     UTCNINE (9,"UTC +9", false),
-    UTCTEN (10,"UTC+10", false),
+    UTCTEN (10,"UTC +10", false),
     UTCELEVEN (11,"UTC +11", false),
     UTCTWELVE (12,"UTC +12", false),
     UTCMINUSONE (-1,"UTC -1", false),
