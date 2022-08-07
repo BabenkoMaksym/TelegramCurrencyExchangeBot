@@ -1,25 +1,28 @@
 package settings;
 
 public enum Language {
-    EN("English", "English \uD83C\uDDFA\uD83C\uDDF8"),
-    UA("Ukrainian", "Українська \uD83C\uDDFA\uD83C\uDDE6"),
-    PL("Polish", "Polski \uD83C\uDDF5\uD83C\uDDF1"),
-    CZ ("Czech", "Čeština 🇨🇿"),
-    RU ("Russian", "Русский \uD83C\uDDF7\uD83C\uDDFA");
+    EN("English", "EnglishSet", "English \uD83C\uDDFA\uD83C\uDDF8"),
+    UA("Ukrainian", "UkrainianSet", "Українська \uD83C\uDDFA\uD83C\uDDE6"),
+    PL("Polish", "PolishSet","Polski \uD83C\uDDF5\uD83C\uDDF1"),
+    CZ ("Czech","CzechSet", "Čeština 🇨🇿"),
+    RU ("Russian", "RussianSet","Русский \uD83C\uDDF7\uD83C\uDDFA");
 
     String langName;
-
+    String langNameSet;
     String langFlag;
 
-    Language(String langName, String langFlag) {
+    Language(String langName, String langNameSet, String langFlag) {
         this.langName = langName;
         this.langFlag = langFlag;
+        this.langNameSet = langNameSet;
     }
 
     public String getLangName() {
         return langName;
     }
-
+    public String getLangNameSet() {
+        return langNameSet;
+    }
     public String getLangFlag() {
         return langFlag;
     }
@@ -33,20 +36,29 @@ public enum Language {
         return null;
     }
 
+    public static Language convertToEnumSet(String text) {
+        for (Language lang : Language.values()) {
+            if (lang.getLangNameSet().equals(text)) {
+                return lang;
+            }
+        }
+        return null;
+    }
+
     public static String translate(String text, Language language) {
         switch (text){
             case "Курс купівлі ":
                 switch (language){
                     case EN: return "Purchase fx rate ";
                     case PL: return "Kurs kupna ";
-                    case CZ: return "Sazba nákupu ";
+                    case CZ: return "Nákup ";
                     default: return text;
                 }
             case "Курс продажу ":
                 switch (language){
                     case EN: return "Sales fx rate ";
                     case PL: return "Kurs sprzedaży ";
-                    case CZ: return "Prodejní sazba ";
+                    case CZ: return "Prodej ";
                     default: return text;
                 }
             case "немає купівлі":
@@ -67,7 +79,7 @@ public enum Language {
                 switch (language){
                     case EN: return "Please type /start or press the button.";
                     case PL: return "Proszę wpisz /start lub naciśnij klawisz.";
-                    case CZ: return "Zadejte /start nebo stiskněte tlačítko.";
+                    case CZ: return "Prosím napište /start nebo stiskněte tlačítko.";
                     default: return text;
                 }
             case "Щоб отримати інфо натисність кнопку":
@@ -88,7 +100,7 @@ public enum Language {
                 switch (language){
                     case EN: return "Welcome. This bot will help you to follow up current fx rates.";
                     case PL: return "Witamy. Ten bot pomoże śledzić aktualne kursy walut.";
-                    case CZ: return "Vítejte. Tento bot vám pomůže sledovat aktuální směnné kurzy.";
+                    case CZ: return "Vítejte. Tento bot vám pomůže sledovat aktuální měnové kurzy.";
                     default: return text;
                 }
         }

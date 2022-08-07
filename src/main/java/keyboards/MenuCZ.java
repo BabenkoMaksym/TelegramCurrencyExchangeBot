@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MenuEN extends Menu{
-    public MenuEN(Settings settings) {
+public class MenuCZ extends Menu{
+    public MenuCZ(Settings settings) {
         super(settings);
     }
 
@@ -31,29 +31,29 @@ public class MenuEN extends Menu{
         List<InlineKeyboardButton> keyboardMSetRow6 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSetRow7 = new ArrayList<>();
         InlineKeyboardButton buttonNumOfDecPlaces = InlineKeyboardButton.builder()
-                .text(Buttons.NUM_DECIMAL_PLACES.getNameEN() + " (" + setting.getNumberOfDecimalPlaces() + ")")
+                .text(Buttons.NUM_DECIMAL_PLACES.getNameCZ() + " (" + setting.getNumberOfDecimalPlaces() + ")")
                 .callbackData(Buttons.NUM_DECIMAL_PLACES.getNameEN())
                 .build();
         InlineKeyboardButton buttonBank = InlineKeyboardButton.builder()
-                .text(Buttons.BANK.getNameEN() + " (" + setting.getSelectedBank().getBankNameEN() + ")")
+                .text(Buttons.BANK.getNameCZ() + " (" + setting.getSelectedBank().getBankNameEN() + ")")
                 .callbackData(Buttons.BANK.getNameEN())
                 .build();
         InlineKeyboardButton buttonCurrency = InlineKeyboardButton.builder()
-                .text(Buttons.CURRENCY.getNameEN() + selectedCurr)
+                .text(Buttons.CURRENCY.getNameCZ() + selectedCurr)
                 .callbackData(Buttons.CURRENCY.getNameEN())
                 .build();
         String NotificationTimeSet = setting.getNotificationTime().getTime() == 0 ? "OFF" :
                 String.valueOf(setting.getNotificationTime().getTime());
         InlineKeyboardButton buttonNotificationTime = InlineKeyboardButton.builder()
-                .text(Buttons.NOTIFICATION.getNameEN() + " (" + NotificationTimeSet + ")")
+                .text(Buttons.NOTIFICATION.getNameCZ() + " (" + NotificationTimeSet + ")")
                 .callbackData(Buttons.NOTIFICATION.getNameEN())
                 .build();
         InlineKeyboardButton buttonZoneId = InlineKeyboardButton.builder()
-                .text(Buttons.ZONEID.getNameEN() + " (" + setting.getZoneId().getNameZone() + ")")
+                .text(Buttons.ZONEID.getNameCZ() + " (" + setting.getZoneId().getNameZone() + ")")
                 .callbackData(Buttons.ZONEID.getNameEN())
                 .build();
         InlineKeyboardButton buttonLang = InlineKeyboardButton.builder()
-                .text(Buttons.LANGUAGE.getNameEN() + " (" + setting.getSelectedLanguage().getLangFlag() + ")")
+                .text(Buttons.LANGUAGE.getNameCZ() + " (" + setting.getSelectedLanguage().getLangFlag() + ")")
                 .callbackData(Buttons.LANGUAGE.getNameEN())
                 .build();
         InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
@@ -85,11 +85,11 @@ public class MenuEN extends Menu{
         List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSRow2 = new ArrayList<>();
         InlineKeyboardButton buttonGetInfo = InlineKeyboardButton.builder()
-                .text(Buttons.GET_INFO.getNameEN())
+                .text(Buttons.GET_INFO.getNameCZ())
                 .callbackData(Buttons.GET_INFO.getNameEN())
                 .build();
         InlineKeyboardButton buttonSettings = InlineKeyboardButton.builder()
-                .text(Buttons.SETTINGS.getNameEN())
+                .text(Buttons.SETTINGS.getNameCZ())
                 .callbackData(Buttons.SETTINGS.getNameEN())
                 .build();
         keyboardMSRow1.add(buttonGetInfo);
