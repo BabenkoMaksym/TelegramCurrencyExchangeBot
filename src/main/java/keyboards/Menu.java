@@ -399,45 +399,8 @@ public abstract class Menu {
         return InlineKeyboardMarkup.builder().keyboard(keyboardMZoneId).build();
     }
     public InlineKeyboardMarkup keyboardLanguage(long chatId) {
-        List<List<InlineKeyboardButton>> keyboardMenuLang = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow2 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow3 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow4 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardMSetRow5 = new ArrayList<>();
-        InlineKeyboardButton buttonUA = InlineKeyboardButton.builder()
-                .text(Language.UA.getLangFlag())
-                .callbackData(Language.UA.getLangName())
-                .build();
-        InlineKeyboardButton buttonEN = InlineKeyboardButton.builder()
-                .text(Language.EN.getLangFlag())
-                .callbackData(Language.EN.getLangName())
-                .build();
-        InlineKeyboardButton buttonPL = InlineKeyboardButton.builder()
-                .text(Language.PL.getLangFlag())
-                .callbackData(Language.PL.getLangName())
-                .build();
-        InlineKeyboardButton buttonCZ = InlineKeyboardButton.builder()
-                .text(Language.CZ.getLangFlag())
-                .callbackData(Language.CZ.getLangName())
-                .build();
-        InlineKeyboardButton buttonRU = InlineKeyboardButton.builder()
-                .text(Language.RU.getLangFlag())
-                .callbackData(Language.RU.getLangName())
-                .build();
-        keyboardMSetRow1.add(buttonUA);
-        keyboardMSetRow2.add(buttonEN);
-        keyboardMSetRow3.add(buttonPL);
-        keyboardMSetRow4.add(buttonCZ);
-        keyboardMSetRow5.add(buttonRU);
-        keyboardMenuLang.add(keyboardMSetRow1);
-        keyboardMenuLang.add(keyboardMSetRow2);
-        keyboardMenuLang.add(keyboardMSetRow3);
-        keyboardMenuLang.add(keyboardMSetRow4);
-        keyboardMenuLang.add(keyboardMSetRow5);
-        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuLang).build();
-    }
-    public InlineKeyboardMarkup keyboardLanguageSet(long chatId) {
+        Setting userSetting = settings.settingsAllUsers.get(chatId);
+        Language selectedLang = userSetting.getSelectedLanguage();
         List<List<InlineKeyboardButton>> keyboardMenuLang = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSetRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSetRow2 = new ArrayList<>();
@@ -446,24 +409,72 @@ public abstract class Menu {
         List<InlineKeyboardButton> keyboardMSetRow5 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSetRow6 = new ArrayList<>();
         InlineKeyboardButton buttonUA = InlineKeyboardButton.builder()
-                .text(Language.UA.getLangFlag())
+                .text(Language.UA.getLangFlag() + getButtonStatus(Language.UA, selectedLang))
                 .callbackData(Language.UA.getLangName())
                 .build();
         InlineKeyboardButton buttonEN = InlineKeyboardButton.builder()
-                .text(Language.EN.getLangFlag())
+                .text(Language.EN.getLangFlag() + getButtonStatus(Language.EN, selectedLang))
                 .callbackData(Language.EN.getLangName())
                 .build();
         InlineKeyboardButton buttonPL = InlineKeyboardButton.builder()
-                .text(Language.PL.getLangFlag())
+                .text(Language.PL.getLangFlag() + getButtonStatus(Language.PL, selectedLang))
                 .callbackData(Language.PL.getLangName())
                 .build();
         InlineKeyboardButton buttonCZ = InlineKeyboardButton.builder()
-                .text(Language.CZ.getLangFlag())
+                .text(Language.CZ.getLangFlag() + getButtonStatus(Language.CZ, selectedLang))
                 .callbackData(Language.CZ.getLangName())
                 .build();
         InlineKeyboardButton buttonRU = InlineKeyboardButton.builder()
-                .text(Language.RU.getLangFlag())
+                .text(Language.RU.getLangFlag() + getButtonStatus(Language.RU, selectedLang))
                 .callbackData(Language.RU.getLangName())
+                .build();
+        InlineKeyboardButton buttonStart = InlineKeyboardButton.builder()
+                .text("➡️")
+                .callbackData(Buttons.START.getNameEN())
+                .build();
+        keyboardMSetRow1.add(buttonUA);
+        keyboardMSetRow2.add(buttonEN);
+        keyboardMSetRow3.add(buttonPL);
+        keyboardMSetRow4.add(buttonCZ);
+        keyboardMSetRow5.add(buttonRU);
+        keyboardMSetRow6.add(buttonStart);
+        keyboardMenuLang.add(keyboardMSetRow1);
+        keyboardMenuLang.add(keyboardMSetRow2);
+        keyboardMenuLang.add(keyboardMSetRow3);
+        keyboardMenuLang.add(keyboardMSetRow4);
+        keyboardMenuLang.add(keyboardMSetRow5);
+        keyboardMenuLang.add(keyboardMSetRow6);
+        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuLang).build();
+    }
+    public InlineKeyboardMarkup keyboardLanguageSet(long chatId) {
+        Setting userSetting = settings.settingsAllUsers.get(chatId);
+        Language selectedLang = userSetting.getSelectedLanguage();
+        List<List<InlineKeyboardButton>> keyboardMenuLang = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow3 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow4 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow5 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSetRow6 = new ArrayList<>();
+        InlineKeyboardButton buttonUA = InlineKeyboardButton.builder()
+                .text(Language.UA.getLangFlag() + getButtonStatus(Language.UA, selectedLang))
+                .callbackData(Language.UA.getLangNameSet())
+                .build();
+        InlineKeyboardButton buttonEN = InlineKeyboardButton.builder()
+                .text(Language.EN.getLangFlag() + getButtonStatus(Language.EN, selectedLang))
+                .callbackData(Language.EN.getLangNameSet())
+                .build();
+        InlineKeyboardButton buttonPL = InlineKeyboardButton.builder()
+                .text(Language.PL.getLangFlag() + getButtonStatus(Language.PL, selectedLang))
+                .callbackData(Language.PL.getLangNameSet())
+                .build();
+        InlineKeyboardButton buttonCZ = InlineKeyboardButton.builder()
+                .text(Language.CZ.getLangFlag() + getButtonStatus(Language.CZ, selectedLang))
+                .callbackData(Language.CZ.getLangNameSet())
+                .build();
+        InlineKeyboardButton buttonRU = InlineKeyboardButton.builder()
+                .text(Language.RU.getLangFlag())
+                .callbackData(Language.RU.getLangNameSet())
                 .build();
         InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
                 .text(Buttons.BACK_TO_START.getNameUA())
@@ -480,12 +491,14 @@ public abstract class Menu {
         keyboardMSetRow5.add(buttonRU);
         keyboardMSetRow6.add(buttonHome);
         keyboardMSetRow6.add(buttonBackToSetting);
+
         keyboardMenuLang.add(keyboardMSetRow1);
         keyboardMenuLang.add(keyboardMSetRow2);
         keyboardMenuLang.add(keyboardMSetRow3);
         keyboardMenuLang.add(keyboardMSetRow4);
         keyboardMenuLang.add(keyboardMSetRow5);
         keyboardMenuLang.add(keyboardMSetRow6);
+
         return InlineKeyboardMarkup.builder().keyboard(keyboardMenuLang).build();
     }
     private String getButtonStatus(Banks current, Banks selected) {
@@ -517,6 +530,13 @@ public abstract class Menu {
     }
 
     private String getButtonStatus(ZoneId current, ZoneId selected) {
+        if (current == selected) {
+            return "✅";
+        }
+        return "";
+    }
+
+    private String getButtonStatus(Language current, Language selected) {
         if (current == selected) {
             return "✅";
         }
