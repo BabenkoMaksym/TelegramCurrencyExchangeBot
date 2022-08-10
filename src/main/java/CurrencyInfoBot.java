@@ -174,16 +174,20 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
 
     private void saveSelectLanguage(CallbackQuery buttonQuery, Language enumData, Setting userSettings)
             throws TelegramApiException {
-        userSettings.setSelectedLanguage(enumData);
-        menu = getMenu(userSettings);
-        updateMessage(buttonQuery, menu.keyboardLanguage(buttonQuery.getMessage().getChatId()));
+        if (!userSettings.getSelectedLanguage().equals(enumData)) {
+            userSettings.setSelectedLanguage(enumData);
+            menu = getMenu(userSettings);
+            updateMessage(buttonQuery, menu.keyboardLanguage(buttonQuery.getMessage().getChatId()));
+        }
     }
 
     private void saveSelectLanguageSet(CallbackQuery buttonQuery, Language enumData, Setting userSettings)
             throws TelegramApiException {
-        userSettings.setSelectedLanguage(enumData);
-        menu = getMenu(userSettings);
-        updateMessage(buttonQuery, menu.keyboardLanguageSet(buttonQuery.getMessage().getChatId()));
+        if (!userSettings.getSelectedLanguage().equals(enumData)) {
+            userSettings.setSelectedLanguage(enumData);
+            menu = getMenu(userSettings);
+            updateMessage(buttonQuery, menu.keyboardLanguageSet(buttonQuery.getMessage().getChatId()));
+        }
     }
 
     private void printMessage(Long chatID, InlineKeyboardMarkup keyboard, String text)
