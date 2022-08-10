@@ -77,11 +77,13 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         Setting userSettings;
         long chatId = message.getChatId();
         synchronized (monitor) {
-            if (settings.settingsAllUsers.get(chatId) == null) {
-                userSettings = new Setting(chatId, NumberOfDecimalPlaces.TWO, Banks.PRIVAT,
-                        Currency.getSelectedCurrencyList(), NotificationTime.NINE, ZoneId.UTC_THREE, Language.UA);
-            } else {
-                userSettings = settings.settingsAllUsers.get(chatId);
+            userSettings = settings.settingsAllUsers.get(chatId);
+        }
+        if (userSettings == null) {
+            userSettings = new Setting(chatId, NumberOfDecimalPlaces.TWO, Banks.PRIVAT,
+                    Currency.getSelectedCurrencyList(), NotificationTime.NINE, ZoneId.UTC_THREE, Language.UA);
+            synchronized (monitor) {
+                settings.settingsAllUsers.put(chatId, userSettings);
             }
         }
         if (message.hasText() && message.hasEntities()) {
@@ -96,9 +98,6 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                             "Будь ласка оберіть мову. Please select language.\n" +
                                     "Proszę wybrać język. Prosím vyberte jazyk.\n" +
                                     "Выбери пожалуйста язык.");
-                    synchronized (monitor) {
-                        settings.settingsAllUsers.put(chatId, userSettings);
-                    }
                 }
             }
         } else {
@@ -111,12 +110,11 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         Setting userSettings;
         long chatId = buttonQuery.getMessage().getChatId();
         synchronized (monitor) {
-            if (settings.settingsAllUsers.get(chatId) == null) {
-                userSettings = new Setting(chatId, NumberOfDecimalPlaces.TWO, Banks.PRIVAT,
-                        Currency.getSelectedCurrencyList(), NotificationTime.NINE, ZoneId.UTC_THREE, Language.UA);
-            } else {
-                userSettings = settings.settingsAllUsers.get(chatId);
-            }
+            userSettings = settings.settingsAllUsers.get(chatId);
+        }
+        if (userSettings == null) {
+            userSettings = new Setting(chatId, NumberOfDecimalPlaces.TWO, Banks.PRIVAT,
+                    Currency.getSelectedCurrencyList(), NotificationTime.NINE, ZoneId.UTC_THREE, Language.UA);
         }
         menu = getMenu(userSettings);
 
