@@ -103,6 +103,13 @@ public enum Language {
                     case CZ: return "Vítejte. Tento bot vám pomůže sledovat aktuální měnové kurzy.";
                     default: return text;
                 }
+            case "Підтвердити":
+                switch (language){
+                    case EN: return "Confirm";
+                    case PL: return "Zatwierdzić";
+                    case CZ: return "Potvrdit";
+                    default: return text;
+                }
         }
         return "";
     }
