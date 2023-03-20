@@ -2,6 +2,8 @@ package settings;
 
 public enum Buttons {
     START("Старт", "/start", "/start", "/start"),
+    CONVERTER("Конвертер валют", "Currency converter",
+            "Przelicznik walut", "Převodník měn"),
     GET_INFO("Отримати інфо", "Get info",
             "Otrzymać informację", "Získat informace"),
     SETTINGS("Налаштування", "Settings", "Ustawienia", "Nastavení"),

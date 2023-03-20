@@ -1,5 +1,7 @@
+import banksUtil.Converter;
 import keyboards.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.*;
@@ -8,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import settings.*;
 import settings.Currency;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,16 +46,16 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-//        return "TestKabaBOT";
+        return "TestKabaBOT";
 //        return "@CurrencyInfoProjectGroup1TestBot";
-        return "@CurrencyInfoProjectGroup1Bot";
+//        return "@CurrencyInfoProjectGroup1Bot";
     }
 
     @Override
     public String getBotToken() {
-//        return "5110494726:AAHvvtZ2yxM8dnzpR730WBz4eeG7haGp9Kw";
+        return "5110494726:AAHvvtZ2yxM8dnzpR730WBz4eeG7haGp9Kw";
 //        return "5553351040:AAHugdZyMWm_u8av-bQqsEaP6Et7WXPsOtk";
-        return "5416117406:AAE1XHQxbn8TIY2perQrAAiQsNcxlcth9Wo";
+//        return "5416117406:AAE1XHQxbn8TIY2perQrAAiQsNcxlcth9Wo";
     }
 
     @Override
@@ -231,6 +234,9 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                     printMessage(chatId, menu.keyboardStart(),
                             Language.translate("Щоб отримати інфо натисність кнопку",
                                     settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
+                    break;
+                case CONVERTER:
+                    Converter converter = new Converter();
                     break;
                 case SETTINGS:
                     printMessage(chatId, menu.keyboardSettings(settings.settingsAllUsers.get(chatId)),
@@ -460,8 +466,8 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                     saveSelectLanguage(buttonQuery, Language.CZ, userSettings);
                     break;
                 case RU:
-                    printMessage(chatId, "Русский военный корабль, иди на ***. " +
-                            "СЛАВА УКРАЇНІ! \uD83C\uDDFA\uD83C\uDDE6");
+                    sendImage(chatId);
+                    printMessage(chatId, "СЛАВА УКРАЇНІ! \uD83C\uDDFA\uD83C\uDDE6");
                     break;
             }
         }
@@ -485,8 +491,8 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                     saveSelectLanguageSet(buttonQuery, Language.CZ, userSettings);
                     break;
                 case RU:
-                    printMessage(chatId, "Русский военный корабль, иди на ***. " +
-                            "СЛАВА УКРАЇНІ! \uD83C\uDDFA\uD83C\uDDE6");
+                    sendImage(chatId);
+                    printMessage(chatId, "СЛАВА УКРАЇНІ! \uD83C\uDDFA\uD83C\uDDE6");
                     break;
             }
         }
@@ -498,5 +504,14 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                         userSettings.getSelectedLanguage() == Language.PL ? new MenuPL(settings) :
                                 userSettings.getSelectedLanguage() == Language.UA ? new MenuUA(settings) : menu;
         return menu;
+    }
+
+    private void sendImage(long chatId) {
+        SendAnimation animation = new SendAnimation();
+        InputFile inputFile = new InputFile();
+        inputFile.setMedia(new File("src/main/resources/images/image.gif"));
+        animation.setAnimation(inputFile);
+        animation.setChatId(chatId);
+        executeAsync(animation);
     }
 }

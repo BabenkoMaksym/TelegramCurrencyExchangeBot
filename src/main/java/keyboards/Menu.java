@@ -429,7 +429,7 @@ public abstract class Menu {
                 .callbackData(Language.RU.getLangName())
                 .build();
         InlineKeyboardButton buttonStart = InlineKeyboardButton.builder()
-                .text(Language.translate("Підтвердити", selectedLang) )
+                .text(Language.translate("Підтвердити", selectedLang) + "➡️")
                 .callbackData(Buttons.START.getNameEN())
                 .build();
         keyboardMSetRow1.add(buttonUA);
