@@ -123,6 +123,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
 
         checkLanguageStartMenu(buttonQuery, userSettings);
         checkMainMenu(buttonQuery, userSettings);
+        checkConverterMenu(buttonQuery);
         checkBanksMenu(buttonQuery, userSettings);
         checkDecimalPlacesMenu(buttonQuery, userSettings);
         checkNotificationMenu(buttonQuery, userSettings);
@@ -209,7 +210,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
 
     private void updateMessage(CallbackQuery buttonQuery, InlineKeyboardMarkup keyboard)
             throws TelegramApiException {
-        long chatId = buttonQuery.getMessage().getChatId();
+        long chatId = buttonQuery.getFrom().getId();
         int messageId = buttonQuery.getMessage().getMessageId();
         execute(EditMessageReplyMarkup.builder()
                 .chatId(chatId)
@@ -236,7 +237,9 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                                     settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
                     break;
                 case CONVERTER:
-                    Converter converter = new Converter();
+                    printMessage(chatId, menu.keyboardConverterLvl1(chatId),
+                            Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
+                                    settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
                     break;
                 case SETTINGS:
                     printMessage(chatId, menu.keyboardSettings(settings.settingsAllUsers.get(chatId)),
@@ -470,6 +473,34 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                     printMessage(chatId, "СЛАВА УКРАЇНІ! \uD83C\uDDFA\uD83C\uDDE6");
                     break;
             }
+        }
+    }
+    public void checkConverterMenu(CallbackQuery buttonQuery) throws TelegramApiException {
+        String data = buttonQuery.getData();
+        if (data != null) {
+            switch (data) {
+                case "Privat_Conv":
+                    saveSelectBanksConv(buttonQuery, Banks.PRIVAT);
+                    break;
+                case "NBU_Conv":
+                    saveSelectBanksConv(buttonQuery, Banks.NBU);
+                    break;
+                case "Mono_Conv":
+                    saveSelectBanksConv(buttonQuery, Banks.MONO);
+                    break;
+
+            }
+        }
+    }
+
+    private void saveSelectBanksConv(CallbackQuery buttonQuery, Banks enumData) throws TelegramApiException {
+
+        Long chatId = buttonQuery.getFrom().getId();
+        ConverterSetting convSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
+        if(enumData != convSetting.getSelectBank()) {
+            convSetting.setSelectBank(enumData);
+            ConverterSettings.converterSettings.put(chatId, convSetting);
+            updateMessage(buttonQuery, menu.keyboardConverterLvl1(chatId));
         }
     }
 

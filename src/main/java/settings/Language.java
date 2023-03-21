@@ -110,6 +110,13 @@ public enum Language {
                     case CZ: return "Potvrdit";
                     default: return text;
                 }
+            case "Оберіть за курсом якого банку ви хочете розрахувати обмін валют." :
+                switch (language){
+                    case EN: return "Select the bank for which you want to calculate the currency conversion.";
+                    case PL: return "Wybierz bank, dla którego chcesz obliczyć przewalutowanie.";
+                    case CZ: return "Vyberte banku, pro kterou chcete směnu vypočítat.";
+                    default: return text;
+                }
         }
         return "";
     }

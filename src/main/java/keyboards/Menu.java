@@ -10,13 +10,51 @@ import java.util.List;
 public abstract class Menu {
 
     private Settings settings;
-    public abstract InlineKeyboardMarkup keyboardSettings(Setting setting);
 
+//    public abstract InlineKeyboardMarkup keyboardConverterLvl2(Long chatId);
+//    public abstract InlineKeyboardMarkup keyboardConverterLvl3(Long chatId);
+//    public abstract InlineKeyboardMarkup keyboardConverterLvl4(Long chatId);
+//    public abstract InlineKeyboardMarkup keyboardConverterLvl5(Long chatId);
+    public abstract InlineKeyboardMarkup keyboardSettings(Setting setting);
     public abstract InlineKeyboardMarkup keyboardStart();
 
     public Menu(Settings settings) {
         this.settings = settings;
     }
+
+    public InlineKeyboardMarkup keyboardConverterLvl1(Long chatId) {
+        Banks selectedBank = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting()).getSelectBank();
+        List<List<InlineKeyboardButton>> keyboardConverterLvl1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow3 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow4 = new ArrayList<>();
+        InlineKeyboardButton buttonPrivat = InlineKeyboardButton.builder()
+                .text(Banks.PRIVAT.getBankNameEN() + getButtonStatus(Banks.PRIVAT, selectedBank))
+                .callbackData("Privat_Conv")
+                .build();
+        InlineKeyboardButton buttonNBU = InlineKeyboardButton.builder()
+                .text(Banks.NBU.getBankNameEN() + getButtonStatus(Banks.NBU, selectedBank))
+                .callbackData("NBU_Conv")
+                .build();
+        InlineKeyboardButton buttonMonobank = InlineKeyboardButton.builder()
+                .text(Banks.MONO.getBankNameEN() + getButtonStatus(Banks.MONO, selectedBank))
+                .callbackData("Mono_Conv")
+                .build();
+        InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
+                .text(Buttons.BACK_TO_START.getNameUA())
+                .callbackData(Buttons.BACK_TO_START.getNameEN())
+                .build();
+        keyboardMSRow1.add(buttonPrivat);
+        keyboardMSRow2.add(buttonNBU);
+        keyboardMSRow3.add(buttonMonobank);
+        keyboardMSRow4.add(buttonHome);
+        keyboardConverterLvl1.add(keyboardMSRow1);
+        keyboardConverterLvl1.add(keyboardMSRow2);
+        keyboardConverterLvl1.add(keyboardMSRow3);
+        keyboardConverterLvl1.add(keyboardMSRow4);
+        return InlineKeyboardMarkup.builder().keyboard(keyboardConverterLvl1).build();
+    };
 
     public InlineKeyboardMarkup keyboardBanks(long chatId) {
         Setting userSetting = settings.settingsAllUsers.get(chatId);
