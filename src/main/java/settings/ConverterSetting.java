@@ -5,8 +5,8 @@ public class ConverterSetting {
     private Banks selectBank;
     private Currency sellCurrency;
     private Currency buyCurrency;
-    private float sellCount;
-    private float buyCount;
+    private float sellCount = 0.0f;
+    private float buyCount = 0.0f;
 
     public Long getChatId() {
         return chatId;

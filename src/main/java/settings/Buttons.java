@@ -16,8 +16,16 @@ public enum Buttons {
     ZONEID("Часовий пояс", "Time zone",
             "Strefa czasowa", "Časové pásmo"),
     LANGUAGE("Мова", "Language", "Język", "Jazyk"),
-    BACK_TO_SETTINGS("↩️", "Settings", "Settings", "Settings"),
-    BACK_TO_START("🏠️", "BACK_TO_START", "BACK_TO_START", "BACK_TO_START");
+    BACK("↩️", "Settings", "Settings", "Settings"),
+    BACK_TO_START("🏠️", "BACK_TO_START", "BACK_TO_START", "BACK_TO_START"),
+    INSERT_SELL_CURRENCY("У валюті з якої хочемо обміняти",
+            "In the currency from which we want to exchange",
+            "W walucie, z której chcemy dokonać wymiany",
+            "V měně, ze které chceme směnit"),
+    INSERT_BUY_CURRENCY("У валюті яку хочемо купити",
+            "In the currency we want to buy",
+            "W walucie, którą chcemy kupić",
+            "V měně, kterou chceme koupit");
 
     private String buttonsNameUA;
     private String buttonsNameEN;

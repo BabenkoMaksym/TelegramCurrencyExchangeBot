@@ -16,6 +16,8 @@ import static java.lang.String.format;
 
 public class Settings {
 
+
+
     private CurrencyDataBase currencyDataBase;
     public  Map<Long, Setting> settingsAllUsers = new HashMap<>();
     private  final Gson settingGson = new Gson();
@@ -190,5 +192,9 @@ public class Settings {
                 return " USD";
         }
         return "";
+    }
+
+    public CurrencyDataBase getCurrencyDataBase() {
+        return currencyDataBase;
     }
 }

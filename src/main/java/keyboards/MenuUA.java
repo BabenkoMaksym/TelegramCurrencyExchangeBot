@@ -77,6 +77,22 @@ public class MenuUA extends Menu{
     }
 
     @Override
+    public InlineKeyboardMarkup keyboardConverterLvl4(Long chatId) {
+        List<List<InlineKeyboardButton>> keyboardSelectSellOrBuyCurrency = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow2 = new ArrayList<>();
+        InlineKeyboardButton selectSellCurrency = InlineKeyboardButton.builder()
+                .text(Buttons.INSERT_SELL_CURRENCY.getNameUA())
+                .callbackData(Buttons.INSERT_SELL_CURRENCY.getNameEN())
+                .build();
+        InlineKeyboardButton selectBuyCurrency = InlineKeyboardButton.builder()
+                .text(Buttons.INSERT_BUY_CURRENCY.getNameUA())
+                .callbackData(Buttons.INSERT_BUY_CURRENCY.getNameEN())
+                .build();
+        return null;
+    }
+
+    @Override
     public InlineKeyboardMarkup keyboardStart() {
         List<List<InlineKeyboardButton>> keyboardMenuStart = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();

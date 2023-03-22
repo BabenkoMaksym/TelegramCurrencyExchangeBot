@@ -2,6 +2,8 @@ package keyboards;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import serviceClasses.Bank;
+import serviceClasses.CurrencyDataBase;
 import settings.*;
 
 import java.util.ArrayList;
@@ -9,18 +11,14 @@ import java.util.List;
 
 public abstract class Menu {
 
-    private Settings settings;
-
-//    public abstract InlineKeyboardMarkup keyboardConverterLvl2(Long chatId);
-//    public abstract InlineKeyboardMarkup keyboardConverterLvl3(Long chatId);
-//    public abstract InlineKeyboardMarkup keyboardConverterLvl4(Long chatId);
-//    public abstract InlineKeyboardMarkup keyboardConverterLvl5(Long chatId);
-    public abstract InlineKeyboardMarkup keyboardSettings(Setting setting);
-    public abstract InlineKeyboardMarkup keyboardStart();
-
     public Menu(Settings settings) {
         this.settings = settings;
     }
+
+    private Settings settings;
+
+    public abstract InlineKeyboardMarkup keyboardSettings(Setting setting);
+        public abstract InlineKeyboardMarkup keyboardConverterLvl4(Long chatId);
 
     public InlineKeyboardMarkup keyboardConverterLvl1(Long chatId) {
         Banks selectedBank = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting()).getSelectBank();
@@ -54,7 +52,154 @@ public abstract class Menu {
         keyboardConverterLvl1.add(keyboardMSRow3);
         keyboardConverterLvl1.add(keyboardMSRow4);
         return InlineKeyboardMarkup.builder().keyboard(keyboardConverterLvl1).build();
-    };
+    }
+
+    ;
+
+    public InlineKeyboardMarkup keyboardConverterLvl2(Long chatId) {
+        ConverterSetting converterSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
+        Banks selectedBank = converterSetting.getSelectBank();
+        CurrencyDataBase currencyDataBase = settings.getCurrencyDataBase();
+        currencyDataBase.getCurrentInfo(selectedBank);
+        Bank bank = currencyDataBase.currentInfo.get(selectedBank);
+
+
+        List<List<InlineKeyboardButton>> keyboardMenuSellCurrencyConv = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency3 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency4 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency5 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency6 = new ArrayList<>();
+        InlineKeyboardButton buttonSellUahConv = InlineKeyboardButton.builder()
+                .text(Currency.UAH.getCurrencyName())
+                .callbackData("UAH_sell_conv")
+                .build();
+        InlineKeyboardButton buttonSellUsdConv = InlineKeyboardButton.builder()
+                .text(Currency.USD.getCurrencyName())
+                .callbackData("usd_sell_conv")
+                .build();
+        InlineKeyboardButton buttonSellEurConv = InlineKeyboardButton.builder()
+                .text(Currency.EUR.getCurrencyName())
+                .callbackData("eur_sell_conv")
+                .build();
+        InlineKeyboardButton buttonSellPlnConv = InlineKeyboardButton.builder()
+                .text(Currency.PLN.getCurrencyName())
+                .callbackData("pln_sell_conv")
+                .build();
+        InlineKeyboardButton buttonSellBtcConv = InlineKeyboardButton.builder()
+                .text(Currency.BTC.getCurrencyName())
+                .callbackData("btc_sell_conv")
+                .build();
+        InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
+                .text(Buttons.BACK_TO_START.getNameUA())
+                .callbackData(Buttons.BACK_TO_START.getNameEN())
+                .build();
+        InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.CONVERTER.getNameEN())
+                .build();
+        keyboardMenuCurrency1.add(buttonSellUahConv);
+        keyboardMenuCurrency2.add(buttonSellUsdConv);
+        keyboardMenuCurrency3.add(buttonSellEurConv);
+        keyboardMenuCurrency4.add(buttonSellPlnConv);
+        keyboardMenuCurrency5.add(buttonSellBtcConv);
+        keyboardMenuCurrency6.add(buttonHome);
+        keyboardMenuCurrency6.add(buttonBack);
+
+        keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency1);
+        if (bank.getSellRate(Currency.USD) != 0.0f) {
+            keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency2);
+        }
+        if (bank.getSellRate(Currency.EUR) != 0.0f) {
+            keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency3);
+        }
+        if (bank.getSellRate(Currency.PLN) != 0.0f) {
+            keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency4);
+        }
+        if (bank.getSellRate(Currency.BTC) != 0.0f) {
+            keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency5);
+        }
+        keyboardMenuSellCurrencyConv.add(keyboardMenuCurrency6);
+        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuSellCurrencyConv).build();
+
+    }
+
+
+    public InlineKeyboardMarkup keyboardConverterLvl3(Long chatId) {
+        ConverterSetting converterSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
+        Banks selectedBank = converterSetting.getSelectBank();
+        CurrencyDataBase currencyDataBase = settings.getCurrencyDataBase();
+        currencyDataBase.getCurrentInfo(selectedBank);
+        Bank bank = currencyDataBase.currentInfo.get(selectedBank);
+        Currency sellCurrency = converterSetting.getSellCurrency();
+
+
+        List<List<InlineKeyboardButton>> keyboardMenuBuyCurrencyConv = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency3 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency4 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency5 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMenuCurrency6 = new ArrayList<>();
+        InlineKeyboardButton buttonSellUahConv = InlineKeyboardButton.builder()
+                .text(Currency.USD.getCurrencyName())
+                .callbackData("usd_buy_conv")
+                .build();
+        InlineKeyboardButton buttonSellUsdConv = InlineKeyboardButton.builder()
+                .text(Currency.USD.getCurrencyName())
+                .callbackData("usd_buy_conv")
+                .build();
+        InlineKeyboardButton buttonSellEurConv = InlineKeyboardButton.builder()
+                .text(Currency.EUR.getCurrencyName())
+                .callbackData("eur_buy_conv")
+                .build();
+        InlineKeyboardButton buttonSellPlnConv = InlineKeyboardButton.builder()
+                .text(Currency.PLN.getCurrencyName())
+                .callbackData("pln_buy_conv")
+                .build();
+        InlineKeyboardButton buttonSellBtcConv = InlineKeyboardButton.builder()
+                .text(Currency.BTC.getCurrencyName())
+                .callbackData("btc_buy_conv")
+                .build();
+        InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
+                .text(Buttons.BACK_TO_START.getNameUA())
+                .callbackData(Buttons.BACK_TO_START.getNameEN())
+                .build();
+        InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
+                .text(Buttons.BACK.getNameUA())
+                .callbackData("back_to_2_lvl")
+                .build();
+        keyboardMenuCurrency1.add(buttonSellUahConv);
+        keyboardMenuCurrency2.add(buttonSellUsdConv);
+        keyboardMenuCurrency3.add(buttonSellEurConv);
+        keyboardMenuCurrency4.add(buttonSellPlnConv);
+        keyboardMenuCurrency5.add(buttonSellBtcConv);
+        keyboardMenuCurrency6.add(buttonHome);
+        keyboardMenuCurrency6.add(buttonBack);
+        if (sellCurrency != Currency.UAH) {
+            keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency1);
+        }
+        if (bank.getBuyRate(Currency.USD) != 0.0f && sellCurrency != Currency.USD) {
+            keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency2);
+        }
+        if (bank.getBuyRate(Currency.EUR) != 0.0f && sellCurrency != Currency.EUR) {
+            keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency3);
+        }
+        if (bank.getBuyRate(Currency.PLN) != 0.0f && sellCurrency != Currency.PLN) {
+            keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency4);
+        }
+        if (bank.getBuyRate(Currency.BTC) != 0.0f && sellCurrency != Currency.BTC) {
+            keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency5);
+        }
+        keyboardMenuBuyCurrencyConv.add(keyboardMenuCurrency6);
+        return InlineKeyboardMarkup.builder().keyboard(keyboardMenuBuyCurrencyConv).build();
+
+    }
+
+
+
+    public abstract InlineKeyboardMarkup keyboardStart();
 
     public InlineKeyboardMarkup keyboardBanks(long chatId) {
         Setting userSetting = settings.settingsAllUsers.get(chatId);
@@ -81,8 +226,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
         keyboardMSetRow1.add(buttonPrivat);
         keyboardMSetRow2.add(buttonNBU);
@@ -127,8 +272,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
         keyboardMenuCurrency1.add(buttonUsd);
         keyboardMenuCurrency2.add(buttonEur);
@@ -202,8 +347,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
         keyboardMSetRow1.add(buttonNotificationTime9);
         keyboardMSetRow1.add(buttonNotificationTime10);
@@ -252,8 +397,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBackToSetting = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
         keyboardMSetRow1.add(buttonNumberOfDecimalPlaces2);
         keyboardMSetRow2.add(buttonNumberOfDecimalPlaces3);
@@ -385,8 +530,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBackToSetting = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
 
         keyboardMZoneIdRow1.add(buttonZoneIdOne);
@@ -436,6 +581,7 @@ public abstract class Menu {
 
         return InlineKeyboardMarkup.builder().keyboard(keyboardMZoneId).build();
     }
+
     public InlineKeyboardMarkup keyboardLanguage(long chatId) {
         Setting userSetting = settings.settingsAllUsers.get(chatId);
         Language selectedLang = userSetting.getSelectedLanguage();
@@ -484,6 +630,7 @@ public abstract class Menu {
         keyboardMenuLang.add(keyboardMSetRow6);
         return InlineKeyboardMarkup.builder().keyboard(keyboardMenuLang).build();
     }
+
     public InlineKeyboardMarkup keyboardLanguageSet(long chatId) {
         Setting userSetting = settings.settingsAllUsers.get(chatId);
         Language selectedLang = userSetting.getSelectedLanguage();
@@ -519,8 +666,8 @@ public abstract class Menu {
                 .callbackData(Buttons.BACK_TO_START.getNameEN())
                 .build();
         InlineKeyboardButton buttonBackToSetting = InlineKeyboardButton.builder()
-                .text(Buttons.BACK_TO_SETTINGS.getNameUA())
-                .callbackData(Buttons.BACK_TO_SETTINGS.getNameEN())
+                .text(Buttons.BACK.getNameUA())
+                .callbackData(Buttons.BACK.getNameEN())
                 .build();
         keyboardMSetRow1.add(buttonUA);
         keyboardMSetRow2.add(buttonEN);
@@ -539,6 +686,7 @@ public abstract class Menu {
 
         return InlineKeyboardMarkup.builder().keyboard(keyboardMenuLang).build();
     }
+
     private String getButtonStatus(Banks current, Banks selected) {
         if (current == selected) {
             return "✅";

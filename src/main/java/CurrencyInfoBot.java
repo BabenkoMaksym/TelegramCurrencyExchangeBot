@@ -1,4 +1,3 @@
-import banksUtil.Converter;
 import keyboards.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
@@ -8,10 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import settings.*;
-import settings.Currency;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -475,32 +474,79 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void checkConverterMenu(CallbackQuery buttonQuery) throws TelegramApiException {
         String data = buttonQuery.getData();
         if (data != null) {
             switch (data) {
                 case "Privat_Conv":
-                    saveSelectBanksConv(buttonQuery, Banks.PRIVAT);
+                    processBanksConv(buttonQuery, Banks.PRIVAT);
                     break;
                 case "NBU_Conv":
-                    saveSelectBanksConv(buttonQuery, Banks.NBU);
+                    processBanksConv(buttonQuery, Banks.NBU);
                     break;
                 case "Mono_Conv":
-                    saveSelectBanksConv(buttonQuery, Banks.MONO);
+                    processBanksConv(buttonQuery, Banks.MONO);
+                    break;
+                case "UAH_sell_conv":
+                    processSellCurrencyConv(buttonQuery, Currency.UAH);
+                    break;
+                case "usd_sell_conv":
+                    processSellCurrencyConv(buttonQuery, Currency.USD);
+                    break;
+                case "eur_sell_conv":
+                    processSellCurrencyConv(buttonQuery, Currency.EUR);
+                    break;
+                case "pln_sell_conv":
+                    processSellCurrencyConv(buttonQuery, Currency.PLN);
+                    break;
+                case "btc_sell_conv":
+                    processSellCurrencyConv(buttonQuery, Currency.BTC);
+                    break;
+                case "In the currency from which we want to exchange":
+                    processSellCurrencyConv(buttonQuery, Currency.BTC);
+                    break;
+                case "In the currency we want to buy":
+                    processSellCurrencyConv(buttonQuery, Currency.BTC);
+                    break;
+                case "back_to_2_lvl":
+                    buttonBackConv(buttonQuery, menu.keyboardConverterLvl2(buttonQuery.getFrom().getId()));
                     break;
 
             }
         }
     }
 
-    private void saveSelectBanksConv(CallbackQuery buttonQuery, Banks enumData) throws TelegramApiException {
+    private void processSellCurrencyConv(CallbackQuery buttonQuery, Currency enumData) throws TelegramApiException {
 
         Long chatId = buttonQuery.getFrom().getId();
         ConverterSetting convSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
-        if(enumData != convSetting.getSelectBank()) {
+        if (enumData != convSetting.getSellCurrency()) {
+            convSetting.setSellCurrency(enumData);
+            ConverterSettings.converterSettings.put(chatId, convSetting);
+            printMessage(chatId, menu.keyboardConverterLvl3(chatId),
+                    Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
+                            settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
+        }
+    }
+
+    private void buttonBackConv(CallbackQuery buttonQuery, InlineKeyboardMarkup keyboard) throws TelegramApiException {
+        Long chatId = buttonQuery.getFrom().getId();
+        printMessage(chatId, keyboard,
+                Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
+                        settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
+    }
+
+    private void processBanksConv(CallbackQuery buttonQuery, Banks enumData) throws TelegramApiException {
+
+        Long chatId = buttonQuery.getFrom().getId();
+        ConverterSetting convSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
+        if (enumData != convSetting.getSelectBank()) {
             convSetting.setSelectBank(enumData);
             ConverterSettings.converterSettings.put(chatId, convSetting);
-            updateMessage(buttonQuery, menu.keyboardConverterLvl1(chatId));
+            printMessage(chatId, menu.keyboardConverterLvl2(chatId),
+                    Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
+                            settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
         }
     }
 

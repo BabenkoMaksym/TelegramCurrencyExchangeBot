@@ -7,7 +7,8 @@ public enum Currency {
     USD("USD", true),
     EUR("EUR", false),
     PLN("PLN", false),
-    BTC("BTC", false);
+    BTC("BTC", false),
+    UAH("UAH", false);
 
     private String currencyName;
     private boolean currencySelect;
