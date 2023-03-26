@@ -1,16 +1,59 @@
 package banksUtil;
 
+import org.telegram.telegrambots.meta.api.objects.Message;
+import serviceClasses.Bank;
+import serviceClasses.CurrencyDataBase;
+import settings.*;
+
 public class Converter {
-/*    натискаємо конвертер - отримуємо - оберіть банк
-      обираємо банк отримуємо - оберіть валюту з якої ви хочете здійснити обмін
-      обрали валюту - отримуємо - оберіть валюту в яку ви хочете здійснити обмін
-      обираємо валюту
-      отримуємо 2 кнопки :
-            1) ввести сумму у валюті 1
-            2) ввести сумму у валюті 2
-      після вибору отримуємо повідомлення (введіть бажану сумму у валюті 1 або 2)
-      після вводу якщо введено число то виводимо повідомлення типу (згідно {обраний банк}
-      при обміні {сумма} {валюта 1} ви отримаєте {розрахована сумма} {валюта 2}
-*/
+
+    public String convert(Long chatId, Message message, Settings settings) {
+        Long numeric = null;
+        Float result = null;
+         try {
+             numeric = Long.parseLong(message.getText());
+         } catch (NumberFormatException ex) {
+             ex.printStackTrace();
+         }
+         if (numeric != null) {
+             if (numeric > 0 && numeric <=10000000.00f) {
+                 CurrencyDataBase currencyDataBase = settings.getCurrencyDataBase();
+                 ConverterSetting converterSetting = ConverterSettings.converterSettings.get(chatId);
+                 Banks selectBank = converterSetting.getSelectBank();
+                 Bank bank = currencyDataBase.currentInfo.get(selectBank);
+                 Currency sellCurrency = converterSetting.getSellCurrency();
+                 Currency buyCurrency = converterSetting.getBuyCurrency();
+                 if (sellCurrency == Currency.UAH) {
+                     result = (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) ?
+                             numeric / bank.getSellRate(buyCurrency) : numeric * bank.getSellRate(buyCurrency);
+                 } else if (buyCurrency == Currency.UAH) {
+                     result = (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) ?
+                             numeric * bank.getBuyRate(sellCurrency) : numeric / bank.getBuyRate(sellCurrency);
+                 } else {
+                     result = (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) ?
+                             numeric * bank.getBuyRate(sellCurrency) / bank.getSellRate(buyCurrency) :
+                             numeric * bank.getSellRate(buyCurrency) / bank.getBuyRate(sellCurrency);
+                 }
+                 if (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) {
+                     converterSetting.setSellCount(numeric);
+                     converterSetting.setBuyCount(result);
+                 } else {
+                     converterSetting.setSellCount(result);
+                     converterSetting.setBuyCount(numeric);
+                 }
+                 ConverterSettings.converterSettings.put(chatId, converterSetting);
+             } else {
+                 result = -1.00f;
+             }
+         }
+        return result.toString();
+    }
+
+    private String convertFrom() {
+        return null;
+    }
+    private String convertTo() {
+        return null;
+    }
 
 }

@@ -81,6 +81,7 @@ public class MenuUA extends Menu{
         List<List<InlineKeyboardButton>> keyboardSelectSellOrBuyCurrency = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSRow2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardMSRow3 = new ArrayList<>();
         InlineKeyboardButton selectSellCurrency = InlineKeyboardButton.builder()
                 .text(Buttons.INSERT_SELL_CURRENCY.getNameUA())
                 .callbackData(Buttons.INSERT_SELL_CURRENCY.getNameEN())
@@ -89,8 +90,26 @@ public class MenuUA extends Menu{
                 .text(Buttons.INSERT_BUY_CURRENCY.getNameUA())
                 .callbackData(Buttons.INSERT_BUY_CURRENCY.getNameEN())
                 .build();
-        return null;
+        InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
+                .text(Buttons.BACK_TO_START.getNameUA())
+                .callbackData(Buttons.BACK_TO_START.getNameEN())
+                .build();
+        InlineKeyboardButton buttonBack = InlineKeyboardButton.builder()
+                .text(Buttons.BACK.getNameUA())
+                .callbackData("back_to_3_lvl")
+                .build();
+        keyboardMSRow1.add(selectSellCurrency);
+        keyboardMSRow2.add(selectBuyCurrency);
+        keyboardMSRow3.add(buttonHome);
+        keyboardMSRow3.add(buttonBack);
+        keyboardSelectSellOrBuyCurrency.add(keyboardMSRow1);
+        keyboardSelectSellOrBuyCurrency.add(keyboardMSRow2);
+        keyboardSelectSellOrBuyCurrency.add(keyboardMSRow3);
+
+        return InlineKeyboardMarkup.builder().keyboard(keyboardSelectSellOrBuyCurrency).build();
     }
+
+
 
     @Override
     public InlineKeyboardMarkup keyboardStart() {

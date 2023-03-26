@@ -1,3 +1,4 @@
+import banksUtil.Converter;
 import keyboards.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
@@ -78,6 +79,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
     private void handleMessage(Message message) throws TelegramApiException {
         Setting userSettings;
         long chatId = message.getChatId();
+        Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
         synchronized (monitor) {
             userSettings = settings.settingsAllUsers.get(chatId);
         }
@@ -103,8 +105,45 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 }
             }
         } else {
-            printMessage(chatId, Language.translate("Будь ласка впишіть /start або натисніть кнопку.",
-                    userSettings.getSelectedLanguage()));
+            ConverterSetting converterSetting = ConverterSettings.converterSettings.get(chatId);
+            if (converterSetting != null &&
+                    converterSetting.getProcedure() != null) {
+                Converter converter = new Converter();
+                String result = converter.convert(chatId, message, settings);
+                if (result.equals("-1.0")) {
+                    printMessage(chatId,
+                            menu.keyboardConverterLvl5(chatId),
+                            Language.translate("Ви ввели не правильну суму. Конвертувати можна сумму від 0,1 до 10000000.",
+                                    selectedLanguage));
+                } else {
+                    if (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) {
+                        printMessage(chatId,
+                                menu.keyboardConverterLvl5(chatId),
+                                Language.getConvertSettings(chatId, selectedLanguage) +
+                                        Language.translate("При обміні ", selectedLanguage) +
+                                converterSetting.getSellCount() + " " +
+                                converterSetting.getSellCurrency().name() +
+                                Language.translate(" ви отримаєте ", selectedLanguage) +
+                                converterSetting.getBuyCount() + " " +
+                                converterSetting.getBuyCurrency());
+                    } else {
+                        printMessage(chatId,
+                                menu.keyboardConverterLvl5(chatId),
+                                Language.getConvertSettings(chatId, selectedLanguage) +
+                                        Language.translate("Для отримання ", selectedLanguage) +
+                                        converterSetting.getBuyCount() + " " +
+                                        converterSetting.getBuyCurrency().name() +
+                                        Language.translate(" вам необхідно ", selectedLanguage) +
+                                        converterSetting.getSellCount() + " " +
+                                        converterSetting.getSellCurrency());
+                    }
+                }
+                ConverterSettings.converterSettings.remove(chatId);
+
+            } else {
+                printMessage(chatId, Language.translate("Будь ласка впишіть /start або натисніть кнопку.",
+                        userSettings.getSelectedLanguage()));
+            }
         }
     }
 
@@ -476,7 +515,9 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
     }
 
     public void checkConverterMenu(CallbackQuery buttonQuery) throws TelegramApiException {
+        Long chatId = buttonQuery.getFrom().getId();
         String data = buttonQuery.getData();
+        Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
         if (data != null) {
             switch (data) {
                 case "Privat_Conv":
@@ -503,19 +544,65 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 case "btc_sell_conv":
                     processSellCurrencyConv(buttonQuery, Currency.BTC);
                     break;
+                case "uah_buy_conv":
+                    processBuyCurrencyConv(buttonQuery, Currency.UAH);
+                    break;
+                case "usd_buy_conv":
+                    processBuyCurrencyConv(buttonQuery, Currency.USD);
+                    break;
+                case "eur_buy_conv":
+                    processBuyCurrencyConv(buttonQuery, Currency.EUR);
+                    break;
+                case "pln_buy_conv":
+                    processBuyCurrencyConv(buttonQuery, Currency.PLN);
+                    break;
+                case "btc_buy_conv":
+                    processBuyCurrencyConv(buttonQuery, Currency.BTC);
+                    break;
                 case "In the currency from which we want to exchange":
-                    processSellCurrencyConv(buttonQuery, Currency.BTC);
+
+                    printMessage(chatId, Language.getConvertSettings(chatId, selectedLanguage) +
+                            Language.translate("Відправте боту суму яку ви хочете обміняти. Зверніть увагу що приймаються лише числа.",
+                                    selectedLanguage));
+                    setConvertProcedure(chatId, "sell");
                     break;
                 case "In the currency we want to buy":
-                    processSellCurrencyConv(buttonQuery, Currency.BTC);
+                    printMessage(chatId, Language.getConvertSettings(chatId, selectedLanguage) +
+                            Language.translate("Відправте боту суму яку ви хочете отримати. Зверніть увагу що приймаються лише числа.",
+                                    selectedLanguage));
+                    setConvertProcedure(chatId, "buy");
                     break;
                 case "back_to_2_lvl":
                     buttonBackConv(buttonQuery, menu.keyboardConverterLvl2(buttonQuery.getFrom().getId()));
                     break;
-
+                case "back_to_3_lvl":
+                    buttonBackConv(buttonQuery, menu.keyboardConverterLvl3(buttonQuery.getFrom().getId()));
+                    break;
             }
         }
     }
+
+
+    private void setConvertProcedure(Long chatId, String procedure) {
+        ConverterSetting converterSetting = ConverterSettings.converterSettings.get(chatId);
+        converterSetting.setProcedure(procedure);
+        ConverterSettings.converterSettings.put(chatId, converterSetting);
+    }
+
+    private void processBuyCurrencyConv(CallbackQuery buttonQuery, Currency enumData) throws TelegramApiException {
+
+        Long chatId = buttonQuery.getFrom().getId();
+        ConverterSetting convSetting = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting());
+        if (enumData != convSetting.getBuyCurrency()) {
+            convSetting.setBuyCurrency(enumData);
+            ConverterSettings.converterSettings.put(chatId, convSetting);
+            Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
+            printMessage(chatId, menu.keyboardConverterLvl4(chatId), Language.getConvertSettings(chatId, selectedLanguage) +
+                    Language.translate("Оберіть в якій валюті ви бажаєте ввести суму обміну.",
+                            selectedLanguage));
+        }
+    }
+
 
     private void processSellCurrencyConv(CallbackQuery buttonQuery, Currency enumData) throws TelegramApiException {
 
@@ -524,9 +611,10 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         if (enumData != convSetting.getSellCurrency()) {
             convSetting.setSellCurrency(enumData);
             ConverterSettings.converterSettings.put(chatId, convSetting);
-            printMessage(chatId, menu.keyboardConverterLvl3(chatId),
-                    Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
-                            settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
+            Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
+            printMessage(chatId, menu.keyboardConverterLvl3(chatId), Language.getConvertSettings(chatId, selectedLanguage) +
+                    Language.translate("Оберіть валюту на яку ви хочете здійснити обмін.",
+                            selectedLanguage));
         }
     }
 
@@ -544,9 +632,10 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
         if (enumData != convSetting.getSelectBank()) {
             convSetting.setSelectBank(enumData);
             ConverterSettings.converterSettings.put(chatId, convSetting);
-            printMessage(chatId, menu.keyboardConverterLvl2(chatId),
-                    Language.translate("Оберіть за курсом якого банку ви хочете розрахувати обмін валют.",
-                            settings.settingsAllUsers.get(chatId).getSelectedLanguage()));
+            Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
+            printMessage(chatId, menu.keyboardConverterLvl2(chatId), Language.getConvertSettings(chatId, selectedLanguage) +
+                    Language.translate("Оберіть валюту з якої ви хочете здійснити обмін.",
+                            selectedLanguage));
         }
     }
 

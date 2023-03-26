@@ -18,7 +18,9 @@ public abstract class Menu {
     private Settings settings;
 
     public abstract InlineKeyboardMarkup keyboardSettings(Setting setting);
-        public abstract InlineKeyboardMarkup keyboardConverterLvl4(Long chatId);
+
+    public abstract InlineKeyboardMarkup keyboardConverterLvl4(Long chatId);
+
 
     public InlineKeyboardMarkup keyboardConverterLvl1(Long chatId) {
         Banks selectedBank = ConverterSettings.converterSettings.getOrDefault(chatId, new ConverterSetting()).getSelectBank();
@@ -28,15 +30,15 @@ public abstract class Menu {
         List<InlineKeyboardButton> keyboardMSRow3 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMSRow4 = new ArrayList<>();
         InlineKeyboardButton buttonPrivat = InlineKeyboardButton.builder()
-                .text(Banks.PRIVAT.getBankNameEN() + getButtonStatus(Banks.PRIVAT, selectedBank))
+                .text(Banks.PRIVAT.getBankNameEN())
                 .callbackData("Privat_Conv")
                 .build();
         InlineKeyboardButton buttonNBU = InlineKeyboardButton.builder()
-                .text(Banks.NBU.getBankNameEN() + getButtonStatus(Banks.NBU, selectedBank))
+                .text(Banks.NBU.getBankNameEN())
                 .callbackData("NBU_Conv")
                 .build();
         InlineKeyboardButton buttonMonobank = InlineKeyboardButton.builder()
-                .text(Banks.MONO.getBankNameEN() + getButtonStatus(Banks.MONO, selectedBank))
+                .text(Banks.MONO.getBankNameEN())
                 .callbackData("Mono_Conv")
                 .build();
         InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
@@ -143,8 +145,8 @@ public abstract class Menu {
         List<InlineKeyboardButton> keyboardMenuCurrency5 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardMenuCurrency6 = new ArrayList<>();
         InlineKeyboardButton buttonSellUahConv = InlineKeyboardButton.builder()
-                .text(Currency.USD.getCurrencyName())
-                .callbackData("usd_buy_conv")
+                .text(Currency.UAH.getCurrencyName())
+                .callbackData("uah_buy_conv")
                 .build();
         InlineKeyboardButton buttonSellUsdConv = InlineKeyboardButton.builder()
                 .text(Currency.USD.getCurrencyName())
@@ -197,6 +199,17 @@ public abstract class Menu {
 
     }
 
+    public InlineKeyboardMarkup keyboardConverterLvl5(long chatId) {
+        List<List<InlineKeyboardButton>> keyboardFinalConverterMenu = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardFinalConverterMenu1 = new ArrayList<>();
+        InlineKeyboardButton buttonHome = InlineKeyboardButton.builder()
+                .text(Buttons.BACK_TO_START.getNameUA())
+                .callbackData(Buttons.BACK_TO_START.getNameEN())
+                .build();
+        keyboardFinalConverterMenu1.add(buttonHome);
+        keyboardFinalConverterMenu.add(keyboardFinalConverterMenu1);
+        return InlineKeyboardMarkup.builder().keyboard(keyboardFinalConverterMenu).build();
+    }
 
 
     public abstract InlineKeyboardMarkup keyboardStart();
@@ -728,4 +741,6 @@ public abstract class Menu {
         }
         return "";
     }
+
+
 }
