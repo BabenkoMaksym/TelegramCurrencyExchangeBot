@@ -79,7 +79,6 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
     private void handleMessage(Message message) throws TelegramApiException {
         Setting userSettings;
         long chatId = message.getChatId();
-        Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
         synchronized (monitor) {
             userSettings = settings.settingsAllUsers.get(chatId);
         }
@@ -90,6 +89,9 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 settings.settingsAllUsers.put(chatId, userSettings);
             }
         }
+
+        Language selectedLanguage = settings.settingsAllUsers.get(chatId).getSelectedLanguage();
+
         if (message.hasText() && message.hasEntities()) {
             Optional<MessageEntity> commandEntity;
             commandEntity = message.getEntities().stream()
