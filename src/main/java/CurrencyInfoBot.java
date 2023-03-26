@@ -46,16 +46,12 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "TestKabaBOT";
-//        return "@CurrencyInfoProjectGroup1TestBot";
-//        return "@CurrencyInfoProjectGroup1Bot";
+        return "TestKabaBOT"; //Впишіть сюди Username вашого бота.
     }
 
     @Override
     public String getBotToken() {
-        return "5110494726:AAHvvtZ2yxM8dnzpR730WBz4eeG7haGp9Kw";
-//        return "5553351040:AAHugdZyMWm_u8av-bQqsEaP6Et7WXPsOtk";
-//        return "5416117406:AAE1XHQxbn8TIY2perQrAAiQsNcxlcth9Wo";
+        return "5110494726:AAHvvtZ2yxM8dnzpR730WBz4eeG7haGp9Kw"; //Впишіть сюди Token вашого бота.
     }
 
     @Override
