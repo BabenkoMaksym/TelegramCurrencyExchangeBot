@@ -8,10 +8,10 @@ import settings.*;
 public class Converter {
 
     public String convert(Long chatId, Message message, Settings settings) {
-        Long numeric = null;
+        Float numeric = null;
         Float result = null;
          try {
-             numeric = Long.parseLong(message.getText());
+             numeric = Float.parseFloat(message.getText());
          } catch (NumberFormatException ex) {
              ex.printStackTrace();
          }
