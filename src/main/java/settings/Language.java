@@ -217,14 +217,14 @@ public enum Language {
                         return text;
                 }
 
-            case "Ви ввели не правильну суму. Конвертувати можна сумму від 0,1 до 10000000.":
+            case "Ви ввели не вірну суму. Конвертувати можна сумму від 0.1 до 10000000.":
                 switch (language) {
                     case EN:
                         return "You entered the wrong amount. You can convert the amount from 0.1 to 10000000.";
                     case PL:
-                        return "Wpisałeś niewłaściwą kwotę. Możesz przeliczyć kwotę od 0,1 do 10000000.";
+                        return "Wpisałeś niewłaściwą kwotę. Możesz przeliczyć kwotę od 0.1 do 10000000.";
                     case CZ:
-                        return "Zadali jste nesprávnou částku. Můžete vyměnit částku od 0,1 do 1 000 000.";
+                        return "Zadali jste nesprávnou částku. Můžete vyměnit částku od 0.1 do 1 000 000.";
                     default:
                         return text;
                 }

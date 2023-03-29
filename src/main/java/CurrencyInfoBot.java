@@ -111,7 +111,7 @@ public class CurrencyInfoBot extends TelegramLongPollingBot {
                 if (result.equals("-1.0")) {
                     printMessage(chatId,
                             menu.keyboardConverterLvl5(chatId),
-                            Language.translate("Ви ввели не правильну суму. Конвертувати можна сумму від 0,1 до 10000000.",
+                            Language.translate("Ви ввели не вірну суму. Конвертувати можна сумму від 0.1 до 10000000.",
                                     selectedLanguage));
                 } else {
                     if (converterSetting.getProcedure() == ConverterSetting.Procedure.SELL) {

@@ -10,12 +10,13 @@ public class Converter {
     public String convert(Long chatId, Message message, Settings settings) {
         String text = message.getText();
         text = text.replace(",", ".");
-        Float numeric = null;
+        Float numeric;
         Float result = null;
          try {
              numeric = Float.parseFloat(text);
          } catch (NumberFormatException ex) {
              ex.printStackTrace();
+             return "-1.0";
          }
          if (numeric != null) {
              if (numeric > 0 && numeric <=10000000.00f) {
